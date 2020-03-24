@@ -9,11 +9,12 @@ const UsersContainer = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({
-    pageNumber: 1,
-    totalRecords: 0,
-    totalPages: 0,
-    recordsPerPage: 10,
+    page: 1,
+    total: 0,
+    total_pages: 0,
+    per_page: 10,
   });
+  const [hasMore, setHasMore] = useState(true);
 
   const errorContext = useContext(ErrorContext);
 
@@ -33,9 +34,20 @@ const UsersContainer = () => {
     fetchUsers();
   }, []);
 
+  const handleInfiniteOnLoad = async () => {
+    if (users.length > filters.per_page) {
+      setHasMore(false);
+    } else {
+      setLoading(true);
+      const res = await getAllUsers(filters);
+      setUsers(users.concat(res.data));
+      setLoading(false);
+    }
+  };
+
   return (
     <AppTemplate title="Users">
-      <UsersList users={users} loading={loading} />
+      <UsersList users={users} loading={loading} hasMore={hasMore} handleInfiniteOnLoad={handleInfiniteOnLoad} />
     </AppTemplate>
   );
 };

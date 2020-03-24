@@ -26,10 +26,10 @@ export function successResponseHandler(response) {
   const data = get(response, 'data');
 
   const pageDetails = {
-    pageNumber: data.page,
-    totalRecords: data.total,
-    totalPages: data.total_pages,
-    recordsPerPage: data.per_page
+    page: data.page,
+    total: data.total,
+    total_pages: data.total_pages,
+    per_page: data.per_page,
   };
 
   return {
