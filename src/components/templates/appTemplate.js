@@ -19,7 +19,7 @@ const AppTemplate = ({ title, back, children }) => {
     <>
       <Header title={title} onBack={back} />
       <Row>
-        <Col>{children}</Col>
+        <Col span={24}>{children}</Col>
       </Row>
     </>
   );
