@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import AppTemplate from '../templates/appTemplate';
 import { getAllUsers, deleteUser } from '../../services/user';
 import ErrorContext from '../../shared/error/context';
+import NotificationContext from '../../shared/notifications/context';
 import UsersList from '../organisms/usersList';
 
 const UsersContainer = () => {
@@ -17,6 +18,7 @@ const UsersContainer = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const errorContext = useContext(ErrorContext);
+  const notificationContext = useContext(NotificationContext);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -51,10 +53,17 @@ const UsersContainer = () => {
       await deleteUser(id);
       const userIndex = users.findIndex(user => user.id === id);
       if (userIndex > -1) {
-        const mutatedUser = [...users];
-        mutatedUser.splice(userIndex, 1);
-        setUsers(mutatedUser);
+        const mutatedUsers = [...users];
+        const deletedUser = mutatedUsers.splice(userIndex, 1);
+        setUsers(mutatedUsers);
         setLoading(false);
+        notificationContext.setNotification(
+          {
+            type: 'success',
+            message: `${deletedUser[0].first_name} ${deletedUser[0].last_name} deleted`,
+          },
+          true
+        );
       }
     } catch (e) {
       errorContext.setError(e);
