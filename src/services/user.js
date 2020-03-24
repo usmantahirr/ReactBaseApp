@@ -18,3 +18,11 @@ export const getUser = async userId =>
       throw error;
     }
   );
+
+export const deleteUser = async userId =>
+  api.delete(USERS, userId).then(
+    res => res,
+    error => {
+      throw error;
+    }
+  );

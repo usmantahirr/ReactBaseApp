@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import AppTemplate from '../templates/appTemplate';
-import { getAllUsers } from '../../services/user';
+import { getAllUsers, deleteUser } from '../../services/user';
 import ErrorContext from '../../shared/error/context';
 import UsersList from '../organisms/usersList';
 
@@ -45,9 +45,32 @@ const UsersContainer = () => {
     }
   };
 
+  const handleDelete = async id => {
+    try {
+      setLoading(true);
+      await deleteUser(id);
+      const userIndex = users.findIndex(user => user.id === id);
+      if (userIndex > -1) {
+        const mutatedUser = [...users];
+        mutatedUser.splice(userIndex, 1);
+        setUsers(mutatedUser);
+        setLoading(false);
+      }
+    } catch (e) {
+      errorContext.setError(e);
+      setLoading(false);
+    }
+  };
+
   return (
     <AppTemplate title="Users">
-      <UsersList users={users} loading={loading} hasMore={hasMore} handleInfiniteOnLoad={handleInfiniteOnLoad} />
+      <UsersList
+        users={users}
+        loading={loading}
+        hasMore={hasMore}
+        handleInfiniteOnLoad={handleInfiniteOnLoad}
+        handleDelete={handleDelete}
+      />
     </AppTemplate>
   );
 };

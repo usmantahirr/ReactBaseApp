@@ -4,13 +4,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import Logger from '../../shared/logger';
-
 const ListContainer = styled(List)`
   margin: 10px 20px;
 `;
 
-const UsersList = ({ users, loading, hasMore, handleInfiniteOnLoad }) => (
+const UsersList = ({ users, loading, hasMore, handleInfiniteOnLoad, handleDelete }) => (
   <InfiniteScroll initialLoad={false} pageStart={0} hasMore={hasMore} loadMore={handleInfiniteOnLoad}>
     <ListContainer
       loading={loading}
@@ -22,7 +20,7 @@ const UsersList = ({ users, loading, hasMore, handleInfiniteOnLoad }) => (
             <Popconfirm
               title="Are you sure"
               onConfirm={() => {
-                Logger.info('confirmed');
+                handleDelete(item.id);
               }}
             >
               <a href="#">delete</a>
